@@ -1,4 +1,4 @@
-name: Sign Python Script
+name: Sign Python Script Hello World
 
 on:
   push:
