@@ -3,22 +3,20 @@ name: Sign Python Script
 on:
   push:
     branches:
-      - main  # Trigger the workflow when changes are pushed to the 'main' branch
+      - main
 
 jobs:
   sign:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the repository
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: Submit the signing request to SignPath
       - name: Submit Signing Request
-        uses: SignPath/github-action-submit-signing-request@v1
-        with:
-          api-url: ${{ secrets.SIGNPATH_API_URL }}
-          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
-          project: "your-project-id"  # Replace with the SignPath project ID (log in, etc)
-          artifact-path: "hello_world.py" 
+        run: |
+          curl -H "Authorization: Bearer ${{ secrets.SIGNPATH_API_TOKEN }}" \
+               -F "ProjectSlug=${{ secrets.PROJECT_SLUG }}" \
+               -F "SigningPolicySlug=${{ secrets.SIGNING_POLICY_SLUG }}" \
+               -F "Artifact=@hello_world.py" \
+               ${{ secrets.SIGNPATH_API_URL }}/SigningRequests
