@@ -13,10 +13,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Create ZIP Artifact
+        run: zip my_artifact.zip hello_world.py
+
       - name: Submit Signing Request
         run: |
           curl -H "Authorization: Bearer ${{ secrets.SIGNPATH_API_TOKEN }}" \
                -F "ProjectSlug=${{ secrets.PROJECT_SLUG }}" \
                -F "SigningPolicySlug=${{ secrets.SIGNING_POLICY_SLUG }}" \
-               -F "Artifact=@hello_world.py" \
+               -F "Artifact=@my_artifact.zip" \
                ${{ secrets.SIGNPATH_API_URL }}/SigningRequests
